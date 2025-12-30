@@ -8,7 +8,7 @@ const authRoutes = require("./src/routes/auth.routes")
 const cors = require("cors");
 
 app.use(cors({
-  origin: "http://localhost:3000",
+  origin: "https://restauarnt-reservation-system-frontend.onrender.com",
   credentials: true
 }));
 
