@@ -15,7 +15,7 @@ async function seedTables() {
   try {
     await mongoose.connect(uri);
 
-    await Table.deleteMany(); // clean slate (acceptable for assessment)
+    await Table.deleteMany(); 
     await Table.insertMany(tables);
 
     console.log("✅ Tables seeded successfully");
