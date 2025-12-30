@@ -37,6 +37,8 @@ app.use("/reservations", reservationRoutes);
 const adminRoutes = require("./src/routes/admin.routes");
 app.use("/admin", adminRoutes);
 
+const adminTableRoutes = require("./src/routes/table.routes")
+app.use("/admin",adminTableRoutes );
 
 
 app.listen(PORT,()=>{

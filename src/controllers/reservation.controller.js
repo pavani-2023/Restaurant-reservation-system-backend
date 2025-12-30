@@ -10,7 +10,7 @@ exports.createReservation = async (req, res, next) => {
     }
 
     // 1️⃣ find tables that can fit guests
-    const tables = await Table.find({ capacity: { $gte: guests } });
+    const tables = await Table.find({ capacity: { $gte: guests },isActive: true });
 
     if (tables.length === 0) {
       return res.status(409).json({ message: "No suitable table available" });
