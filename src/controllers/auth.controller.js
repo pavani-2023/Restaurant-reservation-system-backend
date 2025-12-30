@@ -4,7 +4,41 @@ const User = require("../models/UserModel");
 
 exports.register = async (req, res, next) => {
   try {
-    const { name, email, password, role } = req.body;
+    const { name, email, password } = req.body;
+
+    if (!name || !email || !password) {
+      return res.status(400).json({ message: "Missing fields" });
+    }
+
+    const exists = await User.findOne({ email });
+    if (exists) {
+      return res.status(409).json({ message: "User already exists" });
+    }
+
+    const passwordHash = await bcrypt.hash(password, 10);
+
+    const user = await User.create({
+      name,
+      email,
+      passwordHash,
+      role: "USER" // 🔒 FORCE USER
+    });
+
+    const token = jwt.sign(
+      { userId: user._id, role: user.role },
+      process.env.JWT_SECRET,
+      { expiresIn: "1d" }
+    );
+
+    res.status(201).json({ token, role: user.role });
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.createAdmin = async (req, res, next) => {
+  try {
+    const { name, email, password } = req.body;
 
     if (!name || !email || !password) {
       return res.status(400).json({ message: "Missing fields" });
@@ -21,14 +55,15 @@ exports.register = async (req, res, next) => {
       name,
       email,
       passwordHash,
-      role: role === "ADMIN" ? "ADMIN" : "USER"
+      role: "ADMIN"
     });
 
-    res.status(201).json({ message: "User registered" });
+    res.status(201).json({ message: "Admin created successfully" });
   } catch (err) {
     next(err);
   }
 };
+
 
 exports.login = async (req, res, next) => {
   try {
