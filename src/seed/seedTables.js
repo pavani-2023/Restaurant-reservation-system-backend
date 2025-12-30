@@ -9,7 +9,7 @@ const tables = [
   { tableNumber: 5, capacity: 6 }
 ];
 
-const uri = "mongodb+srv://kakumanupavani251_db_user:Zh1Dy4u1GhXGoDu3@cluster0.rjbvywo.mongodb.net/restaurant_reservation"
+const uri = process.env.MONGO_URI
 
 async function seedTables() {
   try {
