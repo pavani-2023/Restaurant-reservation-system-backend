@@ -29,8 +29,16 @@ const reservationSchema = new mongoose.Schema(
       type: String,
       enum: ["ACTIVE", "CANCELLED"],
       default: "ACTIVE"
+    },
+    editedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    },
+    editedAt: {
+      type: Date,
     }
-  },
+
+    },
   { timestamps: true }
 );
 

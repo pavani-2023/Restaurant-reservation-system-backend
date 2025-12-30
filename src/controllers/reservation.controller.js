@@ -57,3 +57,47 @@ exports.myReservations = async (req, res, next) => {
     next(err);
   }
 };
+
+exports.cancelReservationByUser = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    const reservation = await Reservation.findById(id);
+    if (!reservation) {
+      return res.status(404).json({ message: "Reservation not found" });
+    }
+
+    // 🔐 Ownership check
+    if (reservation.userId.toString() !== req.user.userId) {
+      return res.status(403).json({ message: "Unauthorized" });
+    }
+
+    // ❌ Already cancelled
+    if (reservation.status === "CANCELLED") {
+      return res.status(400).json({ message: "Reservation already cancelled" });
+    }
+
+    // ⏱ 3-hour rule
+    const now = new Date();
+    const startTime = reservation.timeSlot.split(" - ")[0];
+    const reservationDateTime = new Date(
+      `${reservation.date} ${startTime}`
+    );
+
+    const diffHours =
+      (reservationDateTime.getTime() - now.getTime()) / (1000 * 60 * 60);
+
+    if (diffHours < 3) {
+      return res.status(403).json({
+        message: "You can only cancel up to 3 hours before reservation time",
+      });
+    }
+
+    reservation.status = "CANCELLED";
+    await reservation.save();
+
+    res.json({ message: "Reservation cancelled successfully" });
+  } catch (err) {
+    next(err);
+  }
+};

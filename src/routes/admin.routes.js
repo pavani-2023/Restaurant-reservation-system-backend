@@ -4,12 +4,22 @@ const adminOnly = require("../middleware/admin.middleware");
 const {
   getAllReservations,
   cancelReservation,
-  updateReservation
+  updateReservation,
+  getTablesWithAvailability,
+  getAvailableTables
 } = require("../controllers/admin.controller");
 
 const router = express.Router();
 
 router.get("/reservations", authMiddleware, adminOnly, getAllReservations);
+router.get(
+  "/available-tables",
+  authMiddleware,
+  adminOnly,
+  getAvailableTables
+);
+
+
 
 router.patch(
   "/reservations/:id",
@@ -18,8 +28,8 @@ router.patch(
   updateReservation
 );
 
-router.delete(
-  "/reservations/:id",
+router.patch(
+  "/Cancelreservations/:id",
   authMiddleware,
   adminOnly,
   cancelReservation
