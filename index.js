@@ -5,12 +5,19 @@ const connectDB = require("./src/config/db")
 const app = express();
 const PORT = process.env.PORT || 5000;
 const authRoutes = require("./src/routes/auth.routes")
+const cors = require("cors");
 
+app.use(cors({
+  origin: "http://localhost:3000",
+  credentials: true
+}));
 
 app.use(express.json());
 
 // MongoDB Connection
 connectDB()
+
+
 
 // Login and regeister routes
 app.use("/auth", authRoutes);
