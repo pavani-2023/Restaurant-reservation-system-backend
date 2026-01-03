@@ -161,7 +161,3 @@ Introduce pagination and indexing for better performance.
 Pavani Kakumanu
 Full-Stack Developer
 
-
-Help you draft a follow-up email (if needed)
-
-Just tell me.
